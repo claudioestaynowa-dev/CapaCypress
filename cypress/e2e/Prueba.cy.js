@@ -3,6 +3,7 @@
 describe('Prueba - Formulario', () => {
   it('Completar los campos exitosamente', () => {
     cy.visit('https://testautomationpractice.blogspot.com/')
+    cy.contains('Automation Testing Practice').should('be.visible')
     cy.get('#name').type('Juan Perez')
     cy.get('input[placeholder="Enter EMail"]').type('JuanPerez@gmail.com')
     cy.get('#phone').type('92463330')
@@ -22,5 +23,7 @@ describe('Prueba - Formulario', () => {
     cy.visit('https://testautomationpractice.blogspot.com/')
     cy.get('button[name="start"]').click()
     cy.get('button[name="stop"]').should('be.visible')
+    cy.contains('STOP').should('be.visible')
+    cy.contains('button','STOP').click()
   }) 
   })
