@@ -26,4 +26,26 @@ describe('Prueba - Formulario', () => {
     cy.contains('STOP').should('be.visible')
     cy.contains('button','STOP').click()
   }) 
+
+  //flujo que permite marcar solo los checkbox cuyo valor inicie con la letra "s"
+  it('Seleccionar elemento tipo checkbox', () =>{
+    cy.viewport('ipad-mini','landscape') //configura la vista como si fuera un ipad mini pero solo de esta escenario
+    cy.visit('https://testautomationpractice.blogspot.com/')
+    cy.get('input[type="checkbox"][class="form-check-input"]').each(($check)=>{ //llama a todos los checkbox [checkbox1, checkbox2, checkbox3....]
+       const valueText = $check.attr('value')
+        if(valueText.startsWith('s')) { //marcara solo los checkbox cuyo valor inicie con la letra "s"
+          cy.wrap($check).check()
+         //$check.check()
+        }
+    })
+   
   })
+
+//flujo abre una nueva pestaña al presionar el boton "new tab"
+  it('Enlaces que abre una nueva pestaña', () =>{ 
+    cy.visit('https://testautomationpractice.blogspot.com/')
+     cy.get('button[onclick="myFunction()"]').click()
+     //cy.get('button[onclick="myFunction()"]').invoke('removeAttr','onclick').click() //quita el atributo que abre una nueva pestaña 
+  })
+
+})

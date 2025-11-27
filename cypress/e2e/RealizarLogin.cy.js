@@ -1,8 +1,12 @@
+//import { before } from 'mocha'
 import Login from "../support/Pages/Login"
 //import Productos from "../support/Pages/Productos"
 import headerSecondaryContainer from "../support/Pages/Productos"
 
 describe('Realizar Login', () => {
+    beforeEach(() => { 
+        Login.acessarURL()
+    })
 
     it('Login exitoso', () => {
         Login.acessarURL()
