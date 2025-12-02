@@ -23,15 +23,18 @@ describe('Realizar Login', function() {
         //beforeEach(() { 
         beforeEach(function(){ 
             Login.acessarURL('/')
-            cy.url().should('include', 'saucedemo') //Usando el baseUrl del cypress.config.js
+           cy.url().should('include', 'saucedemo') //Usando el baseUrl del cypress.config.js
         })
+
+
 
     //it('Login exitoso',() => {
     it('Login exitoso',function(){
         Login.acessarURL()
-        Login.preencherUsername(this.credenciaisExt.users.standard)
-        Login.preencherPassword(this.credenciaisExt.passwords.passwords_valido)
-        Login.clicarEnLogin()
+        //Login.preencherUsername(this.credenciaisExt.users.standard)
+        //Login.preencherPassword(this.credenciaisExt.passwords.passwords_valido)
+        //Login.clicarEnLogin()
+        cy.realizarLogin(this.credenciaisExt.users.standard, this.credenciaisExt.passwords.passwords_valido) //Usando el comando personalizado "realizarLogin"
         headerSecondaryContainer.validarheaderSecondaryContainer()
     })
 
@@ -64,18 +67,40 @@ describe('Realizar Login', function() {
         Login.preencherPassword(this.credenciaisExt.passwords.passwords_valido)
         Login.clicarEnLogin()
         headerSecondaryContainer.validarheaderSecondaryContainer()
-        cy.get('button[class="btn btn_primary btn_small btn_inventory "]').first().click()
+
+        //COMENTARIO: clicar en el primer producto
+        //cy.get('button[class="btn btn_primary btn_small btn_inventory "]').first().click() 
+
+        //COMENTARIO: clicar en un producto aleatorio
+        let elIndex = Cypress._.random(0, 5)
+        cy.log(`El indice aleatorio es: ${elIndex}`)
+
+        //FORMA 1 DE HACERLO (clicar en un producto aleatorio)
+        cy.get('button[class="btn btn_primary btn_small btn_inventory "]').each(($btn, index)=>{
+            if(index == elIndex){
+                cy.wrap($btn).click()
+            }
+
+        })
+
+        //FORMA 2 DE HACERLO (clicar en un producto aleatorio)
+        //cy.get('button[class="btn btn_primary btn_small btn_inventory "]').eq(elIndex).click()
+
         //clicar en el carrito
         cy.get('a[class="shopping_cart_link"]').click()
+        cy.validarCSS('span[class="title"]', 'color', 'rgb(19, 35, 34)') //COMENTARIO: Usando el comando personalizado "validarCSS"
+        cy.validarCSS('button[class="btn btn_action btn_medium checkout_button "]', 'background-color', 'rgb(61, 220, 145)') //COMENTARIO: Usando el comando personalizado "validarCSS"
+        //cy.get('span[class="title"]').should('have.css', 'color', 'rgb(19, 35, 34)')
+        //cy.get('button[class="btn btn_action btn_medium checkout_button "]').should('have.css','background-color', 'rgb(61, 220, 145)' )
         cy.get('button[class="btn btn_action btn_medium checkout_button "]').click()
-        cy.get('#first-name').type(destinatarioFaker.firstName)
-        cy.get('#last-name').type(destinatarioFaker.lastName)
-        cy.get('#postal-code').type(destinatarioFaker.zipCode)
+        //llenar informacion del destinatario
+        cy.infoDestinatario(destinatarioFaker.firstName, destinatarioFaker.lastName, destinatarioFaker.zipCode) //COMENTARIO: Usando el comando personalizado "infoDestinatario"
+        //cy.get('#first-name').type(destinatarioFaker.firstName)
+        //cy.get('#last-name').type(destinatarioFaker.lastName)
+        //cy.get('#postal-code').type(destinatarioFaker.zipCode)
         cy.get('input[class="submit-button btn btn_primary cart_button btn_action"]').click()
         cy.get('button[class="btn btn_action btn_medium cart_button"]').click()
         cy.get('h2[class="complete-header"]').should('have.text', 'Thank you for your order!')
-
-        //let valorAleatorio = Cypress._.random(0, 5) //COMENTARIO: generar que al añadir al carrito de compras un producto, este sea aleatorio
     })
 
 })
