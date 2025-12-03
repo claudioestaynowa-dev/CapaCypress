@@ -61,7 +61,7 @@ describe('Realizar Login', function() {
 
     const destinatarioFaker = createDestinatario()
 
-    it.only('Realizar compra exitosa', function(){
+    it('Realizar compra exitosa', function(){
         Login.acessarURL()
         Login.preencherUsername(this.credenciaisExt.users.standard)
         Login.preencherPassword(this.credenciaisExt.passwords.passwords_valido)
